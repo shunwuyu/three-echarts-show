@@ -51,7 +51,7 @@ export default class Experience extends kokomi.Base {
     };
 
     this.debug = new Debug();
-
+    // 电影胶卷的色调映射效果，能给图像带来一种类似电影的色彩效果
     this.renderer.toneMapping = THREE.CineonToneMapping;
 
     let resourcesToLoad = resources;
@@ -68,6 +68,7 @@ export default class Experience extends kokomi.Base {
 
     const camera = this.camera as THREE.PerspectiveCamera;
     camera.fov = this.params.cameraFov;
+    // 用于在更改相机的投影参数（如视野、近裁剪面、远裁剪面等）后，更新相机的投影矩阵
     camera.updateProjectionMatrix();
     const cameraPos = new THREE.Vector3(
       this.params.cameraPos.x,

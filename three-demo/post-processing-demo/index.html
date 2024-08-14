@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js with Postprocessing</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.153.0/examples/jsm/postprocessing/EffectComposer.js"></script>
+    <script src="https://unpkg.com/three@0.153.0/examples/jsm/postprocessing/RenderPass.js"></script>
+    <script src="https://unpkg.com/three@0.153.0/examples/jsm/postprocessing/UnrealBloomPass.js"></script>
+    <script>
+        // 创建场景、相机和渲染器
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // 添加一个立方体几何体
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // 设置相机位置
+        camera.position.z = 5;
+
+        // 创建后处理效果
+        const composer = new THREE.EffectComposer(renderer);
+        const renderPass = new THREE.RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        // 添加 UnrealBloomPass 泛光效果
+        const bloomPass = new THREE.UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight), 
+            1.5,  // 强度
+            0.4,  // 半径
+            0.85  // 阈值
+        );
+        composer.addPass(bloomPass);
+
+        // 渲染循环
+        function animate() {
+            requestAnimationFrame(animate);
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+            composer.render(); // 使用 composer 进行渲染
+        }
+
+        animate();
+    </script>
+</body>
+</html>
