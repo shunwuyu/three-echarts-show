@@ -74,24 +74,24 @@ onMounted(() => {
   scene.background = new THREE.Color("#fff"); // 场景颜色
   scene.environment = new THREE.Color("#fff");
   render();
-
+  // 360 全景控制 camera 
   controls = new OrbitControls(camera, renderer.domElement); // 镜头 canvas
   controls.update();
-
+  
   const gridHelper = new THREE.GridHelper(10, 10); // 网格地面
   gridHelper.material.opacity = 0.2; // 网格透明度
   gridHelper.material.transparent = true;
   scene.add(gridHelper);
-
+  
   const loader = new GLTFLoader(); // 加载器
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath("../../public/roadSter/draco/gltf/");
   loader.setDRACOLoader(dracoLoader);
   loader.load("../../public/roadSter/model/bmw01.glb", gltf => {
     const bmw = gltf.scene;
-    //scene.add(bmw);
     console.log(gltf);
     bmw.traverse(child => {
+      console.log(child, '------');
       if (child.isMesh) {
         // console.log(child);
       }
@@ -125,7 +125,7 @@ onMounted(() => {
     scene.add(bmw);
   });
    // 灯光
-  const light1 = new THREE.DirectionalLight(0xffffff, 1);
+   const light1 = new THREE.DirectionalLight(0xffffff, 1);
   light1.position.set(0, 0, 10);
   scene.add(light1);
   const light2 = new THREE.DirectionalLight(0xffffff, 1);
